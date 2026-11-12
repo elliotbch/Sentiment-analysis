@@ -1,0 +1,32 @@
+[
+  {
+    "id": "positive",
+    "title": "Clairement positif",
+    "text": "Just got the keys to our first apartment!! Couldn't be happier, thank you all for the help this weekend :)"
+  },
+  {
+    "id": "negative",
+    "title": "Clairement négatif",
+    "text": "Flight delayed for the third time and now they lost my luggage. Worst travel day ever."
+  },
+  {
+    "id": "neutral",
+    "title": "Neutre, factuel",
+    "text": "The train to Lyon leaves at 7:45 tomorrow, platform B. Meeting at the station café at 7:20."
+  },
+  {
+    "id": "sarcasm",
+    "title": "Sarcasme",
+    "text": "Oh great, my laptop decided to update right before the presentation. Love that for me."
+  },
+  {
+    "id": "ambiguous",
+    "title": "Mitigé, ambigu",
+    "text": "The food was amazing but the service was so slow we almost left. Not sure if I'd go back."
+  },
+  {
+    "id": "negation",
+    "title": "Négation",
+    "text": "Honestly the new album is not bad at all, I wasn't expecting much."
+  }
+]

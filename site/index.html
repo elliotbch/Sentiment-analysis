@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyse de sentiment de tweets</title>
+<meta name="description" content="Classe un tweet en négatif, neutre ou positif avec un modèle Twitter RoBERTa fine-tuné, exécuté directement dans votre navigateur (ONNX Runtime Web).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #ffffff; --border: #e3e6ec; --text: #1b2333; --muted: #5b6475;
+    --accent: #1e3a5f; --accent-light: #e8eef6; --success: #1f7a4d; --warn: #b54708;
+    --neg: #b54708; --neu: #5b6475; --pos: #1f7a4d; --track: #eef0f4; --on-accent: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141c; --card: #171e29; --border: #2a3342; --text: #e6e9ef; --muted: #a3acbb;
+      --accent: #8fb3e0; --accent-light: #1f2a3a; --success: #4cc38a; --warn: #f0a35e;
+      --neg: #f0a35e; --neu: #a3acbb; --pos: #4cc38a; --track: #222b38; --on-accent: #0f141c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 920px; margin: 0 auto; padding: 24px 16px 48px; }
+  a { color: var(--accent); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  header h1 { margin: 0 0 4px; font-size: 2rem; line-height: 1.2; letter-spacing: -0.01em; }
+  header p { margin: 0 0 10px; color: var(--muted); }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 18px; font-weight: 500; font-size: .95rem; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-top: 20px; }
+  h2 { font-size: 1.4rem; line-height: 1.3; margin: 0 0 12px; }
+  h3 { font-size: 1.25rem; line-height: 1.3; margin: 20px 0 8px; }
+  .tabs { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
+  .tabs button { border: 0; background: transparent; color: var(--text); padding: 8px 16px; font: inherit; font-weight: 500; cursor: pointer; }
+  .tabs button[aria-selected="true"] { background: var(--accent); color: var(--on-accent); }
+  .label-row { font-size: .9rem; color: var(--muted); margin: 0 0 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip { border: 1px solid var(--border); background: var(--accent-light); color: var(--text); border-radius: 999px;
+    padding: 6px 12px; font: inherit; font-size: .88rem; cursor: pointer; }
+  .chip:hover { border-color: var(--accent); }
+  textarea { width: 100%; min-height: 96px; resize: vertical; padding: 10px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+  .btn { background: var(--accent); color: var(--on-accent); border: 0; border-radius: 10px; padding: 10px 18px;
+    font: inherit; font-weight: 600; cursor: pointer; }
+  .btn[disabled] { opacity: .6; cursor: wait; }
+  .btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--border); }
+  .hint { color: var(--muted); font-size: .85rem; }
+  .result { margin-top: 18px; }
+  .verdict { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 12px; }
+  .badge { display: inline-block; padding: 3px 12px; border-radius: 999px; font-weight: 700; font-size: 1.05rem; color: #fff; }
+  .badge.small { font-size: .8rem; padding: 2px 9px; }
+  .b-negative { background: #b54708; } .b-neutral { background: #5b6475; } .b-positive { background: #1f7a4d; }
+  .bars { display: grid; gap: 8px; }
+  .bar { display: grid; grid-template-columns: 76px 1fr 56px; gap: 10px; align-items: center; font-size: .9rem; }
+  .track { background: var(--track); border-radius: 6px; height: 14px; overflow: hidden; }
+  .fill { height: 100%; border-radius: 6px; transition: width .35s ease; }
+  .f-negative { background: var(--neg); } .f-neutral { background: var(--neu); } .f-positive { background: var(--pos); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .error { color: var(--warn); font-weight: 500; margin-top: 12px; }
+  .table-wrap { overflow-x: auto; margin-top: 14px; }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  .metrics td:first-child { min-width: 180px; }
+  #batch-result td:first-child { min-width: 11rem; }
+  .note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+  .status { font-size: .85rem; color: var(--muted); }
+  ol { padding-left: 20px; margin: 0; }
+  ol li { margin-bottom: 4px; }
+  .loading { margin-bottom: 16px; }
+  .loading .track { max-width: 420px; }
+  .loading .btn { margin-top: 10px; }
+  .load-fill { background: var(--accent); transition: width .2s linear; }
+  .probs { display: block; margin-top: 4px; color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .privacy { color: var(--muted); font-size: .8rem; margin: 12px 0 0; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  label.btn:has(+ input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 480px) {
+    header h1 { font-size: 1.75rem; }
+    .bar { grid-template-columns: 64px 1fr 48px; }
+    .card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Analyse de sentiment de tweets</h1>
+    <p>Tapez ou collez un tweet : un modèle Twitter RoBERTa fine-tuné le classe en négatif, neutre ou positif, directement dans votre navigateur. Le modèle analyse des textes en anglais.</p>
+    <nav class="links" aria-label="Liens du projet">
+      <a href="https://github.com/elliotbch/Sentiment-analysis">Code sur GitHub</a>
+      <a href="https://www.malt.fr/profile/elliotbouchy1">Elliot Bouchy sur Malt</a>
+    </nav>
+  </header>
+
+  <section class="card" aria-labelledby="try-title">
+    <h2 id="try-title">Essayer</h2>
+    <div id="loading" class="loading" aria-live="polite">
+      <p class="label-row" id="load-text">Préparation du modèle…</p>
+      <div class="track" role="progressbar" aria-labelledby="load-text" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="load-bar"><div class="fill load-fill" id="load-fill" style="width:0%"></div></div>
+      <button class="btn secondary" id="load-btn" hidden>Télécharger le modèle (123 Mo)</button>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Mode d’analyse">
+      <button role="tab" id="tab-single" aria-controls="panel-single" aria-selected="true">Un texte</button>
+      <button role="tab" id="tab-batch" aria-controls="panel-batch" aria-selected="false" tabindex="-1">Lot (jusqu’à 50 lignes)</button>
+    </div>
+
+    <div id="panel-single" role="tabpanel" aria-labelledby="tab-single">
+      <p class="label-row" id="examples-label">Exemples en anglais (cliquer pour analyser) :</p>
+      <div class="chips" id="chips" role="group" aria-labelledby="examples-label"></div>
+      <label for="text" class="label-row" style="display:block">Ou saisissez votre propre texte, en anglais :</label>
+      <textarea id="text" maxlength="1000" placeholder="ex. : Can't wait for the weekend, finally some sun!"></textarea>
+      <div class="row">
+        <button class="btn" id="analyse">Analyser</button>
+        <span class="hint">Ctrl/⌘ + Entrée fonctionne aussi.</span>
+      </div>
+      <div class="result" id="single-result" aria-live="polite"></div>
+    </div>
+
+    <div id="panel-batch" role="tabpanel" aria-labelledby="tab-batch" hidden>
+      <label for="batch" class="label-row" style="display:block">Un texte par ligne, en anglais (50 lignes non vides au maximum) :</label>
+      <textarea id="batch" style="min-height:180px"></textarea>
+      <div class="row">
+        <button class="btn" id="analyse-batch">Tout analyser</button>
+        <button class="btn secondary" id="fill-batch">Charger les exemples</button>
+        <label class="btn secondary" for="batch-file">Importer un fichier .txt</label>
+        <input type="file" id="batch-file" accept=".txt,.csv,text/plain" class="visually-hidden">
+        <span class="hint" id="line-count">0 ligne</span>
+      </div>
+      <div class="result" id="batch-result" aria-live="polite"></div>
+    </div>
+    <p class="status" id="status"></p>
+    <p class="privacy">Calcul effectué dans votre navigateur : aucune donnée n’est envoyée.</p>
+  </section>
+
+  <section class="card" aria-labelledby="how-title">
+    <h2 id="how-title">Comment ça marche</h2>
+    <ol>
+      <li>Modèle de départ : <code>cardiffnlp/twitter-roberta-base-sentiment-latest</code>, un RoBERTa pré-entraîné sur environ 124 millions de tweets.</li>
+      <li>Fine-tuné sur le jeu public Tweet Sentiment Extraction (environ 27 000 tweets en anglais, 3 classes).</li>
+      <li>La validation sert à choisir l’epoch et le modèle ; le test officiel (3 534 tweets) n’est utilisé qu’une fois, pour les chiffres ci-dessous.</li>
+      <li>Exporté en ONNX (quantifié en INT8) et exécuté dans votre navigateur avec ONNX Runtime Web (WebAssembly) ; le modèle (120 Mo) est téléchargé une seule fois puis gardé en cache par le navigateur.</li>
+      <li>Limite connue : l’ironie et le sarcasme sont souvent lus au premier degré (essayez l’exemple « Sarcasme »).</li>
+    </ol>
+    <h3>Résultats sur le jeu de test</h3>
+    <div class="table-wrap">
+      <table class="metrics" id="metrics-table">
+        <thead><tr><th scope="col">Modèle</th><th scope="col" class="num">Accuracy</th><th scope="col" class="num">F1 macro</th></tr></thead>
+        <tbody><tr><td colspan="3" class="hint">Chargement des métriques…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="note" id="metrics-source"></p>
+  </section>
+</main>
+
+<script type="module" src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+{
+ "api": "FastAPI demo (demo/app.py)",
+ "single": [
+  {
+   "text": "Just got the keys to our first apartment!! Couldn't be happier, thank you all for the help this weekend :)",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.0025,
+    "neutral": 0.0124,
+    "positive": 0.9851
+   }
+  },
+  {
+   "text": "Flight delayed for the third time and now they lost my luggage. Worst travel day ever.",
+   "label": "negative",
+   "probabilities": {
+    "negative": 0.9781,
+    "neutral": 0.0181,
+    "positive": 0.0038
+   }
+  },
+  {
+   "text": "The train to Lyon leaves at 7:45 tomorrow, platform B. Meeting at the station café at 7:20.",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0299,
+    "neutral": 0.9634,
+    "positive": 0.0068
+   }
+  },
+  {
+   "text": "Oh great, my laptop decided to update right before the presentation. Love that for me.",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.0041,
+    "neutral": 0.0282,
+    "positive": 0.9678
+   }
+  },
+  {
+   "text": "The food was amazing but the service was so slow we almost left. Not sure if I'd go back.",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.1151,
+    "neutral": 0.5793,
+    "positive": 0.3056
+   }
+  },
+  {
+   "text": "Honestly the new album is not bad at all, I wasn't expecting much.",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.034,
+    "neutral": 0.2368,
+    "positive": 0.7291
+   }
+  },
+  {
+   "text": "@elliot check this out https://t.co/abc123 so good",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.0035,
+    "neutral": 0.0168,
+    "positive": 0.9797
+   }
+  },
+  {
+   "text": "  lots of spaces    around   ",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0439,
+    "neutral": 0.9469,
+    "positive": 0.0092
+   }
+  },
+  {
+   "text": "I don't hate it.",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0865,
+    "neutral": 0.523,
+    "positive": 0.3904
+   }
+  },
+  {
+   "text": "Ça a l'air génial 😂😂 #blessed",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.0055,
+    "neutral": 0.036,
+    "positive": 0.9585
+   }
+  },
+  {
+   "text": "<s> weird </s> tokens <mask>",
+   "label": "negative",
+   "probabilities": {
+    "negative": 0.4967,
+    "neutral": 0.4827,
+    "positive": 0.0206
+   }
+  },
+  {
+   "text": "meh.",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0553,
+    "neutral": 0.9346,
+    "positive": 0.0102
+   }
+  },
+  {
+   "text": "!!!!!!",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0859,
+    "neutral": 0.8128,
+    "positive": 0.1014
+   }
+  },
+  {
+   "text": "ok",
+   "label": "neutral",
+   "probabilities": {
+    "negative": 0.0196,
+    "neutral": 0.975,
+    "positive": 0.0053
+   }
+  },
+  {
+   "text": "worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. ",
+   "label": "negative",
+   "probabilities": {
+    "negative": 0.9447,
+    "neutral": 0.0486,
+    "positive": 0.0066
+   }
+  },
+  {
+   "text": "Never been so happy to see the rain stop, the garden finally gets a break",
+   "label": "positive",
+   "probabilities": {
+    "negative": 0.0235,
+    "neutral": 0.1583,
+    "positive": 0.8182
+   }
+  }
+ ],
+ "batches": [
+  {
+   "texts": [
+    "Just got the keys to our first apartment!! Couldn't be happier, thank you all for the help this weekend :)",
+    "Flight delayed for the third time and now they lost my luggage. Worst travel day ever.",
+    "The train to Lyon leaves at 7:45 tomorrow, platform B. Meeting at the station café at 7:20.",
+    "Oh great, my laptop decided to update right before the presentation. Love that for me.",
+    "The food was amazing but the service was so slow we almost left. Not sure if I'd go back.",
+    "Honestly the new album is not bad at all, I wasn't expecting much.",
+    "@elliot check this out https://t.co/abc123 so good",
+    "  lots of spaces    around   ",
+    "I don't hate it.",
+    "Ça a l'air génial 😂😂 #blessed",
+    "<s> weird </s> tokens <mask>",
+    "meh.",
+    "!!!!!!",
+    "ok",
+    "worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. ",
+    "Never been so happy to see the rain stop, the garden finally gets a break"
+   ],
+   "results": [
+    {
+     "text": "Just got the keys to our first apartment!! Couldn't be happier, thank you all for the help this weekend :)",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0029,
+      "neutral": 0.0155,
+      "positive": 0.9816
+     }
+    },
+    {
+     "text": "Flight delayed for the third time and now they lost my luggage. Worst travel day ever.",
+     "label": "negative",
+     "probabilities": {
+      "negative": 0.979,
+      "neutral": 0.0174,
+      "positive": 0.0036
+     }
+    },
+    {
+     "text": "The train to Lyon leaves at 7:45 tomorrow, platform B. Meeting at the station café at 7:20.",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.0326,
+      "neutral": 0.9595,
+      "positive": 0.008
+     }
+    },
+    {
+     "text": "Oh great, my laptop decided to update right before the presentation. Love that for me.",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0044,
+      "neutral": 0.0285,
+      "positive": 0.9671
+     }
+    },
+    {
+     "text": "The food was amazing but the service was so slow we almost left. Not sure if I'd go back.",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.1291,
+      "neutral": 0.6084,
+      "positive": 0.2625
+     }
+    },
+    {
+     "text": "Honestly the new album is not bad at all, I wasn't expecting much.",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0374,
+      "neutral": 0.2604,
+      "positive": 0.7022
+     }
+    },
+    {
+     "text": "@elliot check this out https://t.co/abc123 so good",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0043,
+      "neutral": 0.0235,
+      "positive": 0.9722
+     }
+    },
+    {
+     "text": "lots of spaces    around",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.0504,
+      "neutral": 0.9345,
+      "positive": 0.0151
+     }
+    },
+    {
+     "text": "I don't hate it.",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.058,
+      "neutral": 0.4652,
+      "positive": 0.4767
+     }
+    },
+    {
+     "text": "Ça a l'air génial 😂😂 #blessed",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0075,
+      "neutral": 0.0578,
+      "positive": 0.9348
+     }
+    },
+    {
+     "text": "<s> weird </s> tokens <mask>",
+     "label": "negative",
+     "probabilities": {
+      "negative": 0.4941,
+      "neutral": 0.4864,
+      "positive": 0.0195
+     }
+    },
+    {
+     "text": "meh.",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.0636,
+      "neutral": 0.9243,
+      "positive": 0.0121
+     }
+    },
+    {
+     "text": "!!!!!!",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.0734,
+      "neutral": 0.8418,
+      "positive": 0.0848
+     }
+    },
+    {
+     "text": "ok",
+     "label": "neutral",
+     "probabilities": {
+      "negative": 0.0219,
+      "neutral": 0.9714,
+      "positive": 0.0066
+     }
+    },
+    {
+     "text": "worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever. worst. day. ever.",
+     "label": "negative",
+     "probabilities": {
+      "negative": 0.9461,
+      "neutral": 0.0467,
+      "positive": 0.0072
+     }
+    },
+    {
+     "text": "Never been so happy to see the rain stop, the garden finally gets a break",
+     "label": "positive",
+     "probabilities": {
+      "negative": 0.0308,
+      "neutral": 0.2185,
+      "positive": 0.7507
+     }
+    }
+   ]
+  }
+ ]
+}

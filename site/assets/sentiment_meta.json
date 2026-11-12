@@ -1,0 +1,13 @@
+{
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "max_len": 128,
+  "normalize_twitter": true,
+  "pad_id": 1,
+  "default_model": "model_int8.onnx",
+  "base_model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+  "run_name": "twitter_roberta_ft"
+}

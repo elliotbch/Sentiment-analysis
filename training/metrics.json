@@ -1,0 +1,609 @@
+{
+  "speed_tests": {
+    "bert_base_notebook_speed": {
+      "model": "bert-base-cased",
+      "batch_size": 16,
+      "max_len": 120,
+      "steps": 60,
+      "sec_per_step": 0.261,
+      "estimated_min_per_epoch": 6.7,
+      "device": "mps",
+      "date": "2026-11-12T11:26:50+00:00"
+    },
+    "twitter_roberta_speed": {
+      "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "batch_size": 32,
+      "max_len": 128,
+      "steps": 40,
+      "sec_per_step": 0.348,
+      "estimated_min_per_epoch": 4.5,
+      "device": "mps",
+      "date": "2026-11-12T11:27:14+00:00"
+    }
+  },
+  "runs": {
+    "twitter_roberta_zero_shot": {
+      "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "head": "auto",
+      "data": "public",
+      "date": "2026-11-12T11:27:36+00:00",
+      "seed": 42,
+      "device": "mps",
+      "machine": "arm64 Darwin 27.2",
+      "torch": "2.15.0",
+      "hyperparameters": {
+        "max_len": 128,
+        "batch_size": 32,
+        "lr": 2e-05,
+        "epochs": 0,
+        "warmup_ratio": 0.06,
+        "weight_decay": 0.01,
+        "optimizer": "adamw",
+        "normalize_twitter": true
+      },
+      "selection": "best epoch on validation macro-F1",
+      "best_epoch": 0,
+      "stopped_early": null,
+      "history": [],
+      "train_minutes": 0.0,
+      "total_minutes": 0.3,
+      "val": {
+        "loss": 0.6761,
+        "accuracy": 0.716,
+        "f1_macro": 0.7155
+      },
+      "test": {
+        "loss": 0.6849,
+        "accuracy": 0.7105,
+        "f1_macro": 0.7101,
+        "n": 3534,
+        "per_class": {
+          "negative": {
+            "precision": 0.685,
+            "recall": 0.8082,
+            "f1-score": 0.7415,
+            "support": 1001.0
+          },
+          "neutral": {
+            "precision": 0.7712,
+            "recall": 0.5091,
+            "f1-score": 0.6133,
+            "support": 1430.0
+          },
+          "positive": {
+            "precision": 0.6913,
+            "recall": 0.883,
+            "f1-score": 0.7755,
+            "support": 1103.0
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "negative",
+            "neutral",
+            "positive"
+          ],
+          "rows_true_cols_pred": [
+            [
+              809,
+              124,
+              68
+            ],
+            [
+              335,
+              728,
+              367
+            ],
+            [
+              37,
+              92,
+              974
+            ]
+          ]
+        },
+        "inference_seconds_total": 6.51
+      },
+      "data_info": {
+        "source": "huggingface.co/datasets/SetFit/tweet_sentiment_extraction@0d5359cfbb2470332f2b82e62269cf755e0ac5c3",
+        "origin": "Kaggle Tweet Sentiment Extraction (2020), Figure Eight 'Data for Everyone'",
+        "raw_rows": {
+          "train_csv": 27480,
+          "test_csv": 3534
+        },
+        "removed_train_rows_overlapping_test": 27,
+        "split": "test = official labelled test set; train/val = stratified 90/10 split of the official train set (seed 42)",
+        "sha256": {
+          "raw_data/train_csv": "192204063468a632b2601f6e833c42d7875b618d1a6e5c9529ad8ca58ee6be75",
+          "raw_data/test_csv": "4d1fc2995ce88eb7d435f18563e93361f35956c3e74ed22572b9614eff6d04e6"
+        },
+        "sizes": {
+          "train": 24707,
+          "val": 2746,
+          "test": 3534
+        },
+        "class_counts": {
+          "train": {
+            "negative": 6996,
+            "neutral": 10001,
+            "positive": 7710
+          },
+          "val": {
+            "negative": 778,
+            "neutral": 1111,
+            "positive": 857
+          },
+          "test": {
+            "negative": 1001,
+            "neutral": 1430,
+            "positive": 1103
+          }
+        }
+      }
+    },
+    "bert_base_notebook": {
+      "model": "bert-base-cased",
+      "head": "notebook",
+      "data": "public",
+      "date": "2026-11-12T11:48:16+00:00",
+      "seed": 42,
+      "device": "mps",
+      "machine": "arm64 Darwin 27.2",
+      "torch": "2.15.0",
+      "hyperparameters": {
+        "max_len": 120,
+        "batch_size": 16,
+        "lr": 2e-05,
+        "epochs": 4,
+        "warmup_ratio": 0.06,
+        "weight_decay": 0.01,
+        "optimizer": "notebook",
+        "normalize_twitter": false
+      },
+      "selection": "best epoch on validation macro-F1",
+      "best_epoch": 2,
+      "stopped_early": null,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.6053,
+          "train_accuracy": 0.7546,
+          "val_loss": 0.5468,
+          "val_accuracy": 0.7768,
+          "val_f1_macro": 0.7803,
+          "epoch_minutes": 5.1
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.3992,
+          "train_accuracy": 0.8471,
+          "val_loss": 0.566,
+          "val_accuracy": 0.7877,
+          "val_f1_macro": 0.79,
+          "epoch_minutes": 4.58
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.2622,
+          "train_accuracy": 0.9098,
+          "val_loss": 0.7592,
+          "val_accuracy": 0.7848,
+          "val_f1_macro": 0.7867,
+          "epoch_minutes": 4.43
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.1786,
+          "train_accuracy": 0.9458,
+          "val_loss": 0.9384,
+          "val_accuracy": 0.78,
+          "val_f1_macro": 0.783,
+          "epoch_minutes": 4.43
+        }
+      ],
+      "train_minutes": 18.5,
+      "total_minutes": 18.9,
+      "val": {
+        "loss": 0.566,
+        "accuracy": 0.7877,
+        "f1_macro": 0.79
+      },
+      "test": {
+        "loss": 0.5344,
+        "accuracy": 0.7895,
+        "f1_macro": 0.7927,
+        "n": 3534,
+        "per_class": {
+          "negative": {
+            "precision": 0.7844,
+            "recall": 0.8032,
+            "f1-score": 0.7937,
+            "support": 1001.0
+          },
+          "neutral": {
+            "precision": 0.7637,
+            "recall": 0.7483,
+            "f1-score": 0.7559,
+            "support": 1430.0
+          },
+          "positive": {
+            "precision": 0.8267,
+            "recall": 0.8305,
+            "f1-score": 0.8286,
+            "support": 1103.0
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "negative",
+            "neutral",
+            "positive"
+          ],
+          "rows_true_cols_pred": [
+            [
+              804,
+              171,
+              26
+            ],
+            [
+              194,
+              1070,
+              166
+            ],
+            [
+              27,
+              160,
+              916
+            ]
+          ]
+        },
+        "inference_seconds_total": 7.96
+      },
+      "data_info": {
+        "source": "huggingface.co/datasets/SetFit/tweet_sentiment_extraction@0d5359cfbb2470332f2b82e62269cf755e0ac5c3",
+        "origin": "Kaggle Tweet Sentiment Extraction (2020), Figure Eight 'Data for Everyone'",
+        "raw_rows": {
+          "train_csv": 27480,
+          "test_csv": 3534
+        },
+        "removed_train_rows_overlapping_test": 27,
+        "split": "test = official labelled test set; train/val = stratified 90/10 split of the official train set (seed 42)",
+        "sha256": {
+          "raw_data/train_csv": "192204063468a632b2601f6e833c42d7875b618d1a6e5c9529ad8ca58ee6be75",
+          "raw_data/test_csv": "4d1fc2995ce88eb7d435f18563e93361f35956c3e74ed22572b9614eff6d04e6"
+        },
+        "sizes": {
+          "train": 24707,
+          "val": 2746,
+          "test": 3534
+        },
+        "class_counts": {
+          "train": {
+            "negative": 6996,
+            "neutral": 10001,
+            "positive": 7710
+          },
+          "val": {
+            "negative": 778,
+            "neutral": 1111,
+            "positive": 857
+          },
+          "test": {
+            "negative": 1001,
+            "neutral": 1430,
+            "positive": 1103
+          }
+        }
+      }
+    },
+    "twitter_roberta_ft_lr2e-5_truncated": {
+      "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "head": "auto",
+      "data": "public",
+      "date": "2026-11-12T12:34:42+00:00",
+      "seed": 42,
+      "device": "mps",
+      "machine": "arm64 Darwin 27.2",
+      "torch": "2.15.0",
+      "hyperparameters": {
+        "max_len": 128,
+        "batch_size": 32,
+        "lr": 2e-05,
+        "epochs": 3,
+        "warmup_ratio": 0.06,
+        "weight_decay": 0.01,
+        "optimizer": "adamw",
+        "normalize_twitter": true
+      },
+      "selection": "best epoch on validation macro-F1",
+      "best_epoch": 1,
+      "stopped_early": "time_limit",
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.5453,
+          "train_accuracy": 0.7752,
+          "val_loss": 0.507,
+          "val_accuracy": 0.7786,
+          "val_f1_macro": 0.7835,
+          "epoch_minutes": 46.03
+        }
+      ],
+      "train_minutes": 46.0,
+      "total_minutes": 46.3,
+      "val": {
+        "loss": 0.507,
+        "accuracy": 0.7786,
+        "f1_macro": 0.7835
+      },
+      "test": {
+        "loss": 0.498,
+        "accuracy": 0.7889,
+        "f1_macro": 0.7933,
+        "n": 3534,
+        "per_class": {
+          "negative": {
+            "precision": 0.7211,
+            "recall": 0.8781,
+            "f1-score": 0.7919,
+            "support": 1001.0
+          },
+          "neutral": {
+            "precision": 0.7779,
+            "recall": 0.7154,
+            "f1-score": 0.7454,
+            "support": 1430.0
+          },
+          "positive": {
+            "precision": 0.886,
+            "recall": 0.8033,
+            "f1-score": 0.8426,
+            "support": 1103.0
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "negative",
+            "neutral",
+            "positive"
+          ],
+          "rows_true_cols_pred": [
+            [
+              879,
+              112,
+              10
+            ],
+            [
+              303,
+              1023,
+              104
+            ],
+            [
+              37,
+              180,
+              886
+            ]
+          ]
+        },
+        "inference_seconds_total": 6.85
+      },
+      "data_info": {
+        "source": "huggingface.co/datasets/SetFit/tweet_sentiment_extraction@0d5359cfbb2470332f2b82e62269cf755e0ac5c3",
+        "origin": "Kaggle Tweet Sentiment Extraction (2020), Figure Eight 'Data for Everyone'",
+        "raw_rows": {
+          "train_csv": 27480,
+          "test_csv": 3534
+        },
+        "removed_train_rows_overlapping_test": 27,
+        "split": "test = official labelled test set; train/val = stratified 90/10 split of the official train set (seed 42)",
+        "sha256": {
+          "raw_data/train_csv": "192204063468a632b2601f6e833c42d7875b618d1a6e5c9529ad8ca58ee6be75",
+          "raw_data/test_csv": "4d1fc2995ce88eb7d435f18563e93361f35956c3e74ed22572b9614eff6d04e6"
+        },
+        "sizes": {
+          "train": 24707,
+          "val": 2746,
+          "test": 3534
+        },
+        "class_counts": {
+          "train": {
+            "negative": 6996,
+            "neutral": 10001,
+            "positive": 7710
+          },
+          "val": {
+            "negative": 778,
+            "neutral": 1111,
+            "positive": 857
+          },
+          "test": {
+            "negative": 1001,
+            "neutral": 1430,
+            "positive": 1103
+          }
+        }
+      },
+      "note": "Run interrupted by the 44-min safety limit during epoch 1: the Mac was swapping (process footprint 8.6 GB, 0.24 it/s). Partial epoch only; kept as a candidate."
+    },
+    "twitter_roberta_ft": {
+      "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+      "head": "auto",
+      "data": "public",
+      "date": "2026-11-12T13:29:29+00:00",
+      "seed": 42,
+      "device": "mps",
+      "machine": "arm64 Darwin 27.2",
+      "torch": "2.15.0",
+      "hyperparameters": {
+        "max_len": 128,
+        "batch_size": 32,
+        "lr": 2e-05,
+        "epochs": 3,
+        "warmup_ratio": 0.06,
+        "weight_decay": 0.01,
+        "optimizer": "adamw",
+        "normalize_twitter": true
+      },
+      "selection": "best epoch on validation macro-F1",
+      "best_epoch": 1,
+      "stopped_early": null,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.5269,
+          "train_accuracy": 0.7838,
+          "val_loss": 0.4915,
+          "val_accuracy": 0.8001,
+          "val_f1_macro": 0.8035,
+          "epoch_minutes": 4.61
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.4117,
+          "train_accuracy": 0.8396,
+          "val_loss": 0.5123,
+          "val_accuracy": 0.7986,
+          "val_f1_macro": 0.8013,
+          "epoch_minutes": 4.6
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.3274,
+          "train_accuracy": 0.8766,
+          "val_loss": 0.5731,
+          "val_accuracy": 0.7935,
+          "val_f1_macro": 0.7969,
+          "epoch_minutes": 4.62
+        }
+      ],
+      "train_minutes": 13.8,
+      "total_minutes": 14.2,
+      "val": {
+        "loss": 0.4915,
+        "accuracy": 0.8001,
+        "f1_macro": 0.8035
+      },
+      "test": {
+        "loss": 0.4781,
+        "accuracy": 0.8096,
+        "f1_macro": 0.8126,
+        "n": 3534,
+        "per_class": {
+          "negative": {
+            "precision": 0.8049,
+            "recall": 0.7952,
+            "f1-score": 0.8,
+            "support": 1001.0
+          },
+          "neutral": {
+            "precision": 0.7668,
+            "recall": 0.7958,
+            "f1-score": 0.7811,
+            "support": 1430.0
+          },
+          "positive": {
+            "precision": 0.8737,
+            "recall": 0.8404,
+            "f1-score": 0.8567,
+            "support": 1103.0
+          }
+        },
+        "confusion_matrix": {
+          "labels": [
+            "negative",
+            "neutral",
+            "positive"
+          ],
+          "rows_true_cols_pred": [
+            [
+              796,
+              192,
+              13
+            ],
+            [
+              171,
+              1138,
+              121
+            ],
+            [
+              22,
+              154,
+              927
+            ]
+          ]
+        },
+        "inference_seconds_total": 8.58
+      },
+      "data_info": {
+        "source": "huggingface.co/datasets/SetFit/tweet_sentiment_extraction@0d5359cfbb2470332f2b82e62269cf755e0ac5c3",
+        "origin": "Kaggle Tweet Sentiment Extraction (2020), Figure Eight 'Data for Everyone'",
+        "raw_rows": {
+          "train_csv": 27480,
+          "test_csv": 3534
+        },
+        "removed_train_rows_overlapping_test": 27,
+        "split": "test = official labelled test set; train/val = stratified 90/10 split of the official train set (seed 42)",
+        "sha256": {
+          "raw_data/train_csv": "192204063468a632b2601f6e833c42d7875b618d1a6e5c9529ad8ca58ee6be75",
+          "raw_data/test_csv": "4d1fc2995ce88eb7d435f18563e93361f35956c3e74ed22572b9614eff6d04e6"
+        },
+        "sizes": {
+          "train": 24707,
+          "val": 2746,
+          "test": 3534
+        },
+        "class_counts": {
+          "train": {
+            "negative": 6996,
+            "neutral": 10001,
+            "positive": 7710
+          },
+          "val": {
+            "negative": 778,
+            "neutral": 1111,
+            "positive": 857
+          },
+          "test": {
+            "negative": 1001,
+            "neutral": 1430,
+            "positive": 1103
+          }
+        }
+      }
+    }
+  },
+  "export": {
+    "date": "2026-11-12T13:33:56+00:00",
+    "from_run": "twitter_roberta_ft",
+    "selection": {
+      "criterion": "validation macro-F1",
+      "candidates_val_f1_macro": {
+        "twitter_roberta_ft": 0.8035,
+        "twitter_roberta_ft_lr2e-5_truncated": 0.7835
+      }
+    },
+    "opset": 17,
+    "runtime": "onnxruntime 1.31.1 CPU",
+    "max_abs_logit_diff_onnx_vs_torch": 5e-06,
+    "test_n": 3534,
+    "fp32": {
+      "accuracy": 0.8096,
+      "f1_macro": 0.8126,
+      "latency_ms_single_tweet_median": 14.2,
+      "size_mb": 475.7
+    },
+    "int8_dynamic": {
+      "accuracy": 0.8076,
+      "f1_macro": 0.8106,
+      "latency_ms_single_tweet_median": 4.8,
+      "size_mb": 119.6,
+      "agreement_with_fp32": 0.9598
+    },
+    "rule": "INT8 kept if accuracy drop <= 0.005 and macro-F1 drop <= 0.005",
+    "drop_int8_vs_fp32": {
+      "accuracy": 0.002,
+      "f1_macro": 0.002
+    },
+    "served_model": "model_int8.onnx",
+    "latency_note": "median single-tweet latency, batch 1, measured on the training Mac (M2 Pro) CPU"
+  }
+}

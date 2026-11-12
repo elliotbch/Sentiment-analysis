@@ -1,0 +1,21 @@
+# Dépendances déduites des imports de notebooks/bert_sentiment_tweets.ipynb.
+# Exécution d'origine : Kaggle GPU, Python 3.7.10, numpy 1.19.5, pandas 1.1.5,
+# torch 1.7.0, transformers 4.5.1 (versions relevées par %watermark dans le notebook).
+# Les bornes supérieures préservent les API utilisées (transformers.AdamW,
+# spacy.load('en'), seaborn.distplot, emot.emo_unicode).
+
+numpy
+pandas
+matplotlib
+seaborn<0.14
+scikit-learn
+torch>=1.7
+transformers>=4.5,<4.40
+nltk
+spacy<3
+wordcloud
+Pillow
+emot==3.1
+pyspellchecker
+watermark
+jupyter

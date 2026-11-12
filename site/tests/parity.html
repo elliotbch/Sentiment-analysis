@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test de fidélité</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --bg: #f7f8fa; --text: #1b2333; --muted: #5b6475; --border: #e3e6ec; --ok: #1f7a4d; --warn: #b54708; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0f141c; --text: #e6e9ef; --muted: #a3acbb; --border: #2a3342; --ok: #4cc38a; --warn: #f0a35e; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ok { color: var(--ok); font-weight: 600; } .ko { color: var(--warn); font-weight: 600; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Fidélité : navigateur contre démo FastAPI</h1>
+  <p>Compare les classes et les probabilités (arrondies à 4 décimales, comme l’API) calculées ici avec celles de
+    <code>parity_reference.json</code> (écrit par <code>parity_reference.py</code> depuis la démo FastAPI). Autre fichier : <code>?ref=URL</code>.</p>
+  <p id="summary">Chargement du modèle…</p>
+  <div class="wrap"><table id="t"></table></div>
+</main>
+<script type="module">
+import { SentimentModel } from "../assets/model.js";
+// Tolerance: 1 unit of the 4th decimal. Integer kernels (MatMulInteger, DynamicQuantizeLinear) are bit-identical
+// between ONNX Runtime 1.31.1 native and WASM, but float kernels (LayerNorm, Softmax, Erf) differ by ~1e-7; when a
+// value sits on a quantization boundary, the INT8 rounding flips and the gap grows through the 12 layers.
+const TOL = 1e-4;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const ref = await (await fetch(new URLSearchParams(location.search).get("ref") || "parity_reference.json")).json();
+const model = new SentimentModel("../assets/");
+const t0 = performance.now();
+await model.load();
+const loadMs = performance.now() - t0;
+const rows = [], times = [];
+const cmp = (mode, text, exp, got) => {
+  const d = Math.max(...Object.keys(exp.probabilities).map((l) => Math.abs(exp.probabilities[l] - got.probabilities[l])));
+  rows.push({ mode, text, api: exp.label, web: got.label, apiP: exp.probabilities, webP: got.probabilities, diff: d,
+    ok: exp.label === got.label && d <= TOL + 1e-12 });
+};
+for (const s of ref.single) {
+  const r = await model.predictOne(s.text);
+  times.push(r.inference_ms);
+  cmp("un texte", s.text, s, r);
+}
+const batchMs = [];
+for (const b of ref.batches) {
+  const r = await model.predictBatch(b.texts);
+  batchMs.push([b.texts.length, r.inference_ms]);
+  b.results.forEach((e, i) => cmp("lot", e.text, e, r.results[i]));
+}
+const fails = rows.filter((r) => !r.ok);
+const maxDiff = Math.max(...rows.map((r) => r.diff));
+const labelsOk = rows.filter((r) => r.api === r.web).length;
+times.sort((a, b) => a - b);
+const median = times[Math.floor(times.length / 2)];
+const diffs = rows.map((r) => r.diff).sort((a, b) => a - b);
+const q = (f) => diffs[Math.min(diffs.length - 1, Math.floor(f * diffs.length))];
+const exact = rows.filter((r) => r.diff < 1e-12 && r.api === r.web).length;
+const margin = (o) => { const v = Object.values(o).sort((a, b) => b - a); return v[0] - v[1]; };
+const flips = rows.filter((r) => r.api !== r.web).map((r) => ({ mode: r.mode, text: r.text.slice(0, 70), api: r.api, web: r.web, apiMargin: margin(r.apiP) }));
+window.__parity = { n: rows.length, labelsOk, exact, maxDiff, p50: q(0.5), p90: q(0.9), p99: q(0.99), fails: fails.length, flips, loadMs, medianMs: median, batchMs, rows };
+$("summary").innerHTML = `<span class="${fails.length ? "ko" : "ok"}">${rows.length - fails.length}/${rows.length} identiques</span>
+  à ${TOL} près (probabilités au 4e chiffre identiques : ${exact}/${rows.length} ; classe identique : ${labelsOk}/${rows.length} ;
+  écart de probabilité médian ${q(0.5).toFixed(4)}, 90e centile ${q(0.9).toFixed(4)}, maximum ${maxDiff.toFixed(4)}).
+  Chargement ${(loadMs / 1000).toFixed(1)} s ; inférence médiane d’un texte ${median.toFixed(1)} ms ; lots : ${batchMs.map(([n, ms]) => `${n} textes en ${ms.toFixed(0)} ms`).join(", ")}.`;
+const L = ["negative", "neutral", "positive"];
+const p = (o) => L.map((l) => o[l].toFixed(4)).join(" / ");
+$("t").innerHTML = `<thead><tr><th>Mode</th><th>Texte</th><th>Classe API</th><th>Classe navigateur</th><th>Probas API (nég/neu/pos)</th><th>Probas navigateur</th><th>Écart max</th><th></th></tr></thead><tbody>` +
+  rows.map((r) => `<tr><td>${r.mode}</td><td>${esc(r.text.slice(0, 90))}</td><td>${r.api}</td><td>${r.web}</td><td class="num">${p(r.apiP)}</td><td class="num">${p(r.webP)}</td><td class="num">${r.diff.toExponential(1)}</td><td class="${r.ok ? "ok" : "ko"}">${r.ok ? "OK" : "ÉCART"}</td></tr>`).join("") + "</tbody>";
+</script>
+</body>
+</html>

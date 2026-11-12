@@ -1,0 +1,7 @@
+# Démo seule (CPU) : pas de PyTorch ni de transformers.
+fastapi>=0.110,<1
+uvicorn>=0.29,<1
+onnxruntime>=1.18,<2
+tokenizers>=0.19,<1
+numpy>=1.26,<3
+huggingface_hub>=0.23,<1

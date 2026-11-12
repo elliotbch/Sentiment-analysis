@@ -1,0 +1,33 @@
+# Données (non versionnées, voir README)
+data/
+input/
+*.csv
+*.zip
+
+# Modèles et sorties d'entraînement
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.h5
+outputs/
+runs/
+
+# Jupyter / Python
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Système
+.DS_Store
+Thumbs.db
+
+# Poids, exports ONNX, caches Hugging Face et journaux d'entraînement (voir training/README.md)
+models/
+*.onnx
+*.safetensors
+training/logs/
+.pytest_cache/
